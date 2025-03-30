@@ -2,7 +2,7 @@
 This is a board I made to learn KiCAD and also because I wanted for a while to delve deeper into Arduinos and electronics. 
 
 # Purpose
-This is a very basic board that is effectively a macro-pad. It is based around an Arduino Pro Micro and uses 4 toggle switches and 4 push-buttons to provide 4 dual-mode macro-programmable buttins (i.e. each button has an A/B mode).
+This is a very basic board that is effectively a macro-pad. It is based around an Arduino Pro Micro and uses 4 toggle switches and 4 push-buttons to provide 4 dual-mode macro-programmable buttins (i.e. each button has an A/B mode). The intention is to use this to call stratagems faster.
 
 Give than you can re-program the ProMicro, this can be changed to your liking. 
 
