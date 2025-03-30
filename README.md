@@ -43,3 +43,7 @@ The 3rd and 4th button vias are also very close to each other, and this might ma
 ## Board shape and standoff screws
 
 The current screws are M2, I would change them to M3. I would also round the corners of the board.
+
+## Make this wearable
+
+It would be cool to make this wearable, like the pad in the game!
