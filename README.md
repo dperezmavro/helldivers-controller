@@ -51,3 +51,7 @@ I would need to work out how to make this a bluetooth-enabled keyboard, and also
 ## Make this wearable
 
 It would be cool to make this wearable, like the pad in the game! This would make most sence if the board is wireless. 
+
+# Lisence
+
+Feel free to replicate this project for your own personal use. No commercial use is allowed (i.e. commercial manufacturing, resale or reuse of parts or the whole of this project).
