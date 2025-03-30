@@ -54,4 +54,4 @@ It would be cool to make this wearable, like the pad in the game! This would mak
 
 # Lisence
 
-Feel free to replicate this project for your own personal use. No commercial use is allowed (i.e. commercial manufacturing, resale or reuse of parts or the whole of this project).
+Feel free to replicate this project for your own personal use. No commercial use is allowed (i.e. uses including, but not limited to, commercial manufacturing, resale, reuse, incorporation or integration of parts or the whole of this project).
