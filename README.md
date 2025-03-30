@@ -11,7 +11,7 @@ I made the design choice to have the Pro Micro attach to the board using pin hea
 
 
 ## Schematic
-![image](graphics/schematic.png)
+![image](graphics/schematic.PNG)
 
 ## 3d render
 This is what the current board render looks like when 3D
