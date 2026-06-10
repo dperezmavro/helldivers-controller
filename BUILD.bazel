@@ -80,15 +80,14 @@ genrule(
     srcs = [
         SKETCH,
         ".clang-tidy",
-    ],
+    ] + glob(["stubs/**"]),
     outs = ["lint.log"],
     cmd = """
         SKETCH=$(location {sketch})
+        STUBS=$$(pwd)/stubs
         if [ -f compile_commands.json ]; then
             {clang_tidy} "$$SKETCH" 2>&1 | tee $@
         else
-            echo "No compile_commands.json found — running with fallback flags." | tee $@
-            echo "Run 'bazel build //:generate_compile_commands' for full analysis." | tee -a $@
             {clang_tidy} "$$SKETCH" \\
                 -- \\
                 -x c++ \\
@@ -96,7 +95,9 @@ genrule(
                 -DARDUINO=10607 \\
                 -DARDUINO_AVR_PROMICRO \\
                 -DF_CPU=16000000L \\
-                2>&1 | tee -a $@
+                -isystem "$$STUBS" \\
+                -include Arduino.h \\
+                2>&1 | tee $@
         fi
     """.format(sketch = SKETCH, clang_tidy = CLANG_TIDY),
     local = True,

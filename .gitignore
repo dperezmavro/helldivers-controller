@@ -3,3 +3,4 @@ bazel-bin
 bazel-helldivers-controller
 bazel-out
 bazel-testlogs
+.DS_Store
