@@ -1,0 +1,43 @@
+---
+# Checks targeting bug-finding and type safety for embedded C++.
+# Arduino-specific caveats:
+#   - setup() and loop() are forced lowercase by the Arduino framework; naming checks are relaxed.
+#   - Missing Arduino/AVR headers are expected when run without compile_commands.json.
+#     Run `bazel build //:generate_compile_commands` first for full analysis.
+Checks: >
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  modernize-use-auto,
+  modernize-use-nullptr,
+  modernize-use-override,
+  modernize-use-default-member-init,
+  performance-for-range-copy,
+  performance-unnecessary-copy-initialization,
+  performance-unnecessary-value-param,
+  readability-braces-around-statements,
+  readability-const-return-type,
+  readability-else-after-return,
+  readability-misleading-indentation,
+  readability-non-const-parameter,
+  readability-redundant-control-flow,
+  readability-simplify-boolean-expr,
+  readability-identifier-naming,
+
+WarningsAsErrors: ''
+
+# Only emit diagnostics for our own files, not Arduino/library headers.
+HeaderFilterRegex: '^helldivers'
+
+FormatStyle: file
+
+CheckOptions:
+  - key:   readability-identifier-naming.FunctionCase
+    value: camelCase
+  - key:   readability-identifier-naming.VariableCase
+    value: camelCase
+  - key:   readability-identifier-naming.ParameterCase
+    value: camelCase
+  - key:   readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key:   readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
