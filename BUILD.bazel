@@ -1,0 +1,122 @@
+# Bazel build targets for the Helldivers stratagem controller.
+#
+# Prerequisites — install once via arduino-cli:
+#   arduino-cli core install SparkFun:avr
+#   arduino-cli lib install "ezButton"
+#
+# Board FQBN: SparkFun Pro Micro 5V/16MHz.
+# Change to "SparkFun:avr:promicro3V3" for the 3.3V/8MHz variant.
+
+BOARD_FQBN = "SparkFun:avr:promicro"
+SKETCH = "helldivers-controller.ino"
+
+# ---------------------------------------------------------------------------
+# bazel build //:compile
+#
+# Compiles the sketch to a .hex file ready to flash.
+# ---------------------------------------------------------------------------
+genrule(
+    name = "compile",
+    srcs = [SKETCH],
+    outs = [SKETCH + ".hex"],
+    cmd = """
+        arduino-cli compile \\
+            --fqbn {fqbn} \\
+            --output-dir $(@D) \\
+            $(location {sketch})
+    """.format(fqbn = BOARD_FQBN, sketch = SKETCH),
+    local = True,
+    message = "Compiling sketch with arduino-cli",
+)
+
+# ---------------------------------------------------------------------------
+# bazel build //:generate_compile_commands
+#
+# Emits compile_commands.json in the workspace root so that clang-tidy and
+# IDEs can resolve Arduino/AVR headers.  Run this before :lint for best
+# results.  Uses avr-gcc's -MJ flag to capture per-TU compilation databases.
+# ---------------------------------------------------------------------------
+genrule(
+    name = "generate_compile_commands",
+    srcs = [SKETCH],
+    outs = ["compile_commands.json"],
+    cmd = """
+        TMP_DIR=$$(mktemp -d)
+        arduino-cli compile \\
+            --fqbn {fqbn} \\
+            --build-property "compiler.cpp.extra_flags=-MJ $$TMP_DIR/cmd.json" \\
+            --output-dir $$TMP_DIR \\
+            $(location {sketch}) \\
+            2>/dev/null || true
+        # Wrap single-object fragment in a JSON array
+        if [ -f "$$TMP_DIR/cmd.json" ]; then
+            echo "[" > $@
+            cat "$$TMP_DIR/cmd.json" >> $@
+            echo "]" >> $@
+        else
+            echo "[]" > $@
+        fi
+    """.format(fqbn = BOARD_FQBN, sketch = SKETCH),
+    local = True,
+    message = "Generating compile_commands.json",
+)
+
+# ---------------------------------------------------------------------------
+# bazel build //:lint
+#
+# Runs clang-tidy on the sketch.  If compile_commands.json exists in the
+# workspace root (from :generate_compile_commands), it is used for accurate
+# include resolution.  Otherwise a minimal fallback flag set is used.
+#
+# Lint findings are written to bazel-bin/lint.log and echoed to stdout.
+# The target fails only if clang-tidy exits non-zero (i.e. errors found).
+# ---------------------------------------------------------------------------
+genrule(
+    name = "lint",
+    srcs = [
+        SKETCH,
+        ".clang-tidy",
+    ],
+    outs = ["lint.log"],
+    cmd = """
+        SKETCH=$(location {sketch})
+        if [ -f compile_commands.json ]; then
+            clang-tidy "$$SKETCH" 2>&1 | tee $@
+        else
+            echo "No compile_commands.json found — running with fallback flags." | tee $@
+            echo "Run 'bazel build //:generate_compile_commands' for full analysis." | tee -a $@
+            clang-tidy "$$SKETCH" \\
+                -- \\
+                -x c++ \\
+                -std=c++17 \\
+                -DARDUINO=10607 \\
+                -DARDUINO_AVR_PROMICRO \\
+                -DF_CPU=16000000L \\
+                2>&1 | tee -a $@
+        fi
+    """.format(sketch = SKETCH),
+    local = True,
+    message = "Running clang-tidy",
+)
+
+# ---------------------------------------------------------------------------
+# bazel build //:format_check
+#
+# Verifies that the sketch matches .clang-format style.
+# Exits non-zero (and fails the build) if any formatting differs.
+# To auto-fix: clang-format -i helldivers-controller.ino
+# ---------------------------------------------------------------------------
+genrule(
+    name = "format_check",
+    srcs = [
+        SKETCH,
+        ".clang-format",
+    ],
+    outs = ["format_check.log"],
+    cmd = """
+        SKETCH=$(location {sketch})
+        clang-format --dry-run --Werror "$$SKETCH" 2>&1 | tee $@
+    """.format(sketch = SKETCH),
+    local = True,
+    message = "Checking formatting with clang-format",
+)

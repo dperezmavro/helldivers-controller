@@ -1,1 +1,5 @@
 controller-backups/
+bazel-bin
+bazel-helldivers-controller
+bazel-out
+bazel-testlogs

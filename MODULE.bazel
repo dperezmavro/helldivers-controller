@@ -1,0 +1,4 @@
+module(
+    name = "helldivers_controller",
+    version = "0.1.0",
+)
