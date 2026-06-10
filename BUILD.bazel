@@ -10,6 +10,10 @@
 BOARD_FQBN = "SparkFun:avr:promicro"
 SKETCH = "helldivers-controller.ino"
 
+# Homebrew LLVM tools (keg-only, not linked into /usr/local/bin by default).
+CLANG_TIDY = "/usr/local/opt/llvm/bin/clang-tidy"
+CLANG_FORMAT = "/usr/local/opt/llvm/bin/clang-format"
+
 # ---------------------------------------------------------------------------
 # bazel build //:compile
 #
@@ -81,11 +85,11 @@ genrule(
     cmd = """
         SKETCH=$(location {sketch})
         if [ -f compile_commands.json ]; then
-            clang-tidy "$$SKETCH" 2>&1 | tee $@
+            {clang_tidy} "$$SKETCH" 2>&1 | tee $@
         else
             echo "No compile_commands.json found — running with fallback flags." | tee $@
             echo "Run 'bazel build //:generate_compile_commands' for full analysis." | tee -a $@
-            clang-tidy "$$SKETCH" \\
+            {clang_tidy} "$$SKETCH" \\
                 -- \\
                 -x c++ \\
                 -std=c++17 \\
@@ -94,7 +98,7 @@ genrule(
                 -DF_CPU=16000000L \\
                 2>&1 | tee -a $@
         fi
-    """.format(sketch = SKETCH),
+    """.format(sketch = SKETCH, clang_tidy = CLANG_TIDY),
     local = True,
     message = "Running clang-tidy",
 )
@@ -115,8 +119,8 @@ genrule(
     outs = ["format_check.log"],
     cmd = """
         SKETCH=$(location {sketch})
-        clang-format --dry-run --Werror "$$SKETCH" 2>&1 | tee $@
-    """.format(sketch = SKETCH),
+        {clang_format} --dry-run --Werror "$$SKETCH" 2>&1 | tee $@
+    """.format(sketch = SKETCH, clang_format = CLANG_FORMAT),
     local = True,
     message = "Checking formatting with clang-format",
 )

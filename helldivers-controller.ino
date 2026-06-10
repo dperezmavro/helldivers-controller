@@ -1,127 +1,126 @@
-#include "Keyboard.h"
+#include <Keyboard.h>
 #include <Mouse.h>
 #include <ezButton.h>
 
 // #define DEBUG
-#define PIN_SLOT_1_BTN 3
-#define PIN_SLOT_1_TOGGLE 2
-#define PIN_SLOT_2_BTN 5
-#define PIN_SLOT_2_TOGGLE 4
-#define PIN_SLOT_3_BTN 7
-#define PIN_SLOT_3_TOGGLE 6
-#define PIN_SLOT_4_BTN 8
-#define PIN_SLOT_4_TOGGLE 9
 
-#define WAIT_BETWEEN_KEY_PRESS 75
-#define DEBOUNCE_TIME 50
+// Pin assignments
+constexpr int PIN_SLOT_1_BTN    = 3;
+constexpr int PIN_SLOT_1_TOGGLE = 2;
+constexpr int PIN_SLOT_2_BTN    = 5;
+constexpr int PIN_SLOT_2_TOGGLE = 4;
+constexpr int PIN_SLOT_3_BTN    = 7;
+constexpr int PIN_SLOT_3_TOGGLE = 6;
+constexpr int PIN_SLOT_4_BTN    = 8;
+constexpr int PIN_SLOT_4_TOGGLE = 9;
 
-// button 1
-const char reinforceCode[] = "wsdaw";
-const char stalwartCode[] = "saswwa";
+// Timing (milliseconds)
+constexpr unsigned long WAIT_BETWEEN_KEY_PRESS_MS   = 75;
+constexpr unsigned long DEBOUNCE_TIME_MS            = 50;
+constexpr unsigned long LED_FEEDBACK_MS             = 50;
+constexpr unsigned long MULTI_TRIGGER_PREVENTION_MS = 300;
 
-// button 2
-const char resupplyCode[] = "sswd";
-const char guardDogRoverCode[] = "swawds";
+// Slot 1
+constexpr char REINFORCE_CODE[] = "wsdaw";
+constexpr char STALWART_CODE[]  = "saswwa";
 
-// button 3
-const char sentryAutocannonCode[] = "swdwaw";
-const char machineGunCode[] = "saswd";
+// Slot 2
+constexpr char RESUPPLY_CODE[]        = "sswd";
+constexpr char GUARD_DOG_ROVER_CODE[] = "swawds";
 
-// button 4
-const char eagleNapalmAirstrikeCode[] = "ddsadw";
-const char fiveHundredKgAirstrikeCode[] = "wdsss";
+// Slot 3
+constexpr char SENTRY_AUTOCANNON_CODE[] = "swdwaw";
+constexpr char MACHINE_GUN_CODE[]       = "saswd";
 
-// create buttons
-ezButton slot_1(PIN_SLOT_1_BTN, INPUT_PULLUP);
-ezButton slot_2(PIN_SLOT_2_BTN, INPUT_PULLUP);
-ezButton slot_3(PIN_SLOT_3_BTN, INPUT_PULLUP);
-ezButton slot_4(PIN_SLOT_4_BTN, INPUT_PULLUP);
+// Slot 4
+constexpr char EAGLE_NAPALM_AIRSTRIKE_CODE[]    = "ddsadw";
+constexpr char FIVE_HUNDRED_KG_AIRSTRIKE_CODE[] = "wdsss";
 
-// create debouncer
-long lastSwitchDetectedMIllis;
-const long multiTriggerPreventionInterval = 300;
+ezButton slot1(PIN_SLOT_1_BTN, INPUT_PULLUP);
+ezButton slot2(PIN_SLOT_2_BTN, INPUT_PULLUP);
+ezButton slot3(PIN_SLOT_3_BTN, INPUT_PULLUP);
+ezButton slot4(PIN_SLOT_4_BTN, INPUT_PULLUP);
+
+// unsigned long to match millis() return type and avoid overflow in subtraction
+unsigned long lastSwitchDetectedMillis = 0;
+
+void callStratagem(const char* primary, const char* secondary, int modePin);
 
 void setup() {
   Serial.begin(9600);
 
-  // debouncer
-  lastSwitchDetectedMIllis = millis();
+  lastSwitchDetectedMillis = millis();
 
-  // setup toggles
   pinMode(PIN_SLOT_1_TOGGLE, INPUT);
   pinMode(PIN_SLOT_2_TOGGLE, INPUT);
   pinMode(PIN_SLOT_3_TOGGLE, INPUT);
   pinMode(PIN_SLOT_4_TOGGLE, INPUT);
 
-  // setup buttons
-  slot_1.setDebounceTime(DEBOUNCE_TIME);
-  slot_2.setDebounceTime(DEBOUNCE_TIME);
-  slot_3.setDebounceTime(DEBOUNCE_TIME);
-  slot_4.setDebounceTime(DEBOUNCE_TIME);
+  slot1.setDebounceTime(DEBOUNCE_TIME_MS);
+  slot2.setDebounceTime(DEBOUNCE_TIME_MS);
+  slot3.setDebounceTime(DEBOUNCE_TIME_MS);
+  slot4.setDebounceTime(DEBOUNCE_TIME_MS);
 
-  // start kbd/mouse libraries
   Keyboard.begin();
   Mouse.begin();
 
-  // feedback for debugging
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-  slot_1.loop();
-  slot_2.loop();
-  slot_3.loop();
-  slot_4.loop();
+  slot1.loop();
+  slot2.loop();
+  slot3.loop();
+  slot4.loop();
 
-  if (slot_1.isPressed()) {
-    callStratagem(reinforceCode, stalwartCode, PIN_SLOT_1_TOGGLE);
-  } else if (slot_2.isPressed()) {
-    callStratagem(resupplyCode, guardDogRoverCode, PIN_SLOT_2_TOGGLE);
-  } else if (slot_3.isPressed()) {
-    callStratagem(sentryAutocannonCode, machineGunCode, PIN_SLOT_3_TOGGLE);
-  } else if (slot_4.isPressed()) {
-    callStratagem(eagleNapalmAirstrikeCode, fiveHundredKgAirstrikeCode, PIN_SLOT_4_TOGGLE);
+  if (slot1.isPressed()) {
+    callStratagem(REINFORCE_CODE, STALWART_CODE, PIN_SLOT_1_TOGGLE);
+  } else if (slot2.isPressed()) {
+    callStratagem(RESUPPLY_CODE, GUARD_DOG_ROVER_CODE, PIN_SLOT_2_TOGGLE);
+  } else if (slot3.isPressed()) {
+    callStratagem(SENTRY_AUTOCANNON_CODE, MACHINE_GUN_CODE, PIN_SLOT_3_TOGGLE);
+  } else if (slot4.isPressed()) {
+    callStratagem(EAGLE_NAPALM_AIRSTRIKE_CODE, FIVE_HUNDRED_KG_AIRSTRIKE_CODE, PIN_SLOT_4_TOGGLE);
   }
 }
 
-void callStratagem(char primaryStratagem[], char secondaryStratagem[], int mode_pin) {
-  if (millis() - lastSwitchDetectedMIllis < multiTriggerPreventionInterval) {
+void callStratagem(const char* primary, const char* secondary, int modePin) {
+  if (millis() - lastSwitchDetectedMillis < MULTI_TRIGGER_PREVENTION_MS) {
 #ifdef DEBUG
     Serial.println("spotted multiple bounces");
 #endif
     return;
   }
 
-  lastSwitchDetectedMIllis = millis();
+  lastSwitchDetectedMillis = millis();
 
-  digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
-  delay(50);                        // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(LED_FEEDBACK_MS);
+  digitalWrite(LED_BUILTIN, LOW);
 
-  int p = digitalRead(mode_pin);
-  char *s = p == 1 ? primaryStratagem : secondaryStratagem;
+  const bool  isPrimary = (digitalRead(modePin) == HIGH);
+  const char* stratagem = isPrimary ? primary : secondary;
 
 #ifdef DEBUG
-  Serial.print(p);
+  Serial.print(isPrimary);
   Serial.print(" ");
-  Serial.println(s);
+  Serial.println(stratagem);
   return;
 #endif
 
   Keyboard.press(KEY_LEFT_CTRL);
-  delay(WAIT_BETWEEN_KEY_PRESS);
+  delay(WAIT_BETWEEN_KEY_PRESS_MS);
 
-  for (int i = 0; i < strlen(s); i++) {
-    char c = s[i];
-
-    Keyboard.press(c);
-    delay(WAIT_BETWEEN_KEY_PRESS);
-    Keyboard.release(c);
-    delay(WAIT_BETWEEN_KEY_PRESS);
+  const size_t len = strlen(stratagem);
+  for (size_t i = 0; i < len; ++i) {
+    Keyboard.press(static_cast<uint8_t>(stratagem[i]));
+    delay(WAIT_BETWEEN_KEY_PRESS_MS);
+    Keyboard.release(static_cast<uint8_t>(stratagem[i]));
+    delay(WAIT_BETWEEN_KEY_PRESS_MS);
   }
 
   Mouse.press();
-  delay(WAIT_BETWEEN_KEY_PRESS);
+  delay(WAIT_BETWEEN_KEY_PRESS_MS);
   Mouse.release();
 
   Keyboard.releaseAll();
