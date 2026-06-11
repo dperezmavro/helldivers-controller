@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 # Bazel build targets for the Helldivers stratagem controller.
 #
@@ -125,10 +125,17 @@ genrule(
     cmd = "cp $< $@",
 )
 
+cc_library(
+    name = "headers",
+    hdrs = ["stratagem-assignments.h"],
+    visibility = ["//visibility:public"],
+)
+
 cc_binary(
     name = "firmware",
     srcs = [":sketch_cpp"],
     deps = [
+        ":headers",
         "@arduino_keyboard//:keyboard",
         "@arduino_mouse//:mouse",
         "@ezbutton//:ezbutton",

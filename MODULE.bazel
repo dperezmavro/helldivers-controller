@@ -8,11 +8,6 @@ bazel_dep(name = "rules_cc", version = "0.2.19")
 
 # ── External repository rules ─────────────────────────────────────────────────
 
-new_local_repository = use_repo_rule(
-    "@bazel_tools//tools/build_defs/repo:local.bzl",
-    "new_local_repository",
-)
-
 http_archive = use_repo_rule(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive",
@@ -59,10 +54,12 @@ http_archive(
     build_file = "//toolchain:mouse.BUILD",
 )
 
-# SparkFun AVR boards 1.1.13 (install with: arduino-cli core install SparkFun:avr)
-new_local_repository(
+# SparkFun AVR boards 1.1.13 (sourced from SparkFun's board-manager index)
+http_archive(
     name = "sparkfun_avr",
-    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/SparkFun/hardware/avr/1.1.13",
+    url = "https://github.com/sparkfun/Arduino_Boards/raw/main/IDE_Board_Manager/sparkfunboards.1.1.13.tar.bz2",
+    sha256 = "d7af391cafc5e16830cac7c13484ef62765dd7a36aaba5f25020ce3c39617115",
+    strip_prefix = "avr",
     build_file = "//toolchain:sparkfun_avr.BUILD",
 )
 
