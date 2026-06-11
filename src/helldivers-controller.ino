@@ -3,9 +3,9 @@
 #include <Mouse.h>
 #include <ezButton.h>
 
+#include "debug.h"
 #include "stratagem-assignments.h"
 #include "time-constants.h"
-#include "debug.h"
 
 ezButton slot1(PIN_SLOT_1_BTN, INPUT_PULLUP);
 ezButton slot2(PIN_SLOT_2_BTN, INPUT_PULLUP);
