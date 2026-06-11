@@ -1,0 +1,6 @@
+# Target the AVR ATmega32U4 platform; selects the avr-gcc cc_toolchain
+# registered in MODULE.bazel for all cc_binary / cc_library targets.
+build --platforms=//toolchain:avr_atmega32u4
+
+# Surface full compiler command lines on failure for easier debugging.
+build --verbose_failures

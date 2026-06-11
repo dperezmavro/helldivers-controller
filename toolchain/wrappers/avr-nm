@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Locates the avr toolchain binary in Bazel's external repos at runtime.
+# Works for both new_local_repository and http_archive without hardcoded paths.
+EXECROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+TOOL="$(basename "${BASH_SOURCE[0]}")"
+for bin_dir in "$EXECROOT"/external/*/bin; do
+    [ -x "$bin_dir/$TOOL" ] || continue
+    exec "$bin_dir/$TOOL" "$@"
+done
+printf "error: %s not found under %s/external/\n" "$TOOL" "$EXECROOT" >&2
+exit 1

@@ -1,0 +1,80 @@
+module(
+    name = "helldivers_controller",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_cc", version = "0.2.19")
+
+# ── External repository rules ─────────────────────────────────────────────────
+
+http_archive = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+)
+
+avr_gcc_paths = use_repo_rule("//toolchain:avr_gcc_paths.bzl", "avr_gcc_paths")
+
+# ── Tool chain (avr-gcc installed by arduino-cli) ─────────────────────────────
+# Not hermetic: paths are machine-specific.
+# For CI, replace these new_local_repository entries with http_archive rules
+# that download the same packages from downloads.arduino.cc / GitHub.
+
+http_archive(
+    name = "avr_gcc",
+    url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino7-x86_64-apple-darwin14.tar.bz2",
+    sha256 = "f6ed2346953fcf88df223469088633eb86de997fa27ece117fd1ef170d69c1f8",
+    strip_prefix = "avr",
+    build_file = "//toolchain:avr_gcc.BUILD",
+)
+
+# ── Arduino libraries (installed by arduino-cli) ─────────────────────────────
+
+http_archive(
+    name = "arduino_avr_core",
+    url = "https://downloads.arduino.cc/cores/staging/avr-1.8.8.tar.bz2",
+    sha256 = "a234c2a43dcd01ce54be665806f183b8e6ec4e966d2e3e0c3358b63023d6390c",
+    strip_prefix = "ArduinoCore-avr-1.8.8",
+    build_file = "//toolchain:core.BUILD",
+)
+
+http_archive(
+    name = "arduino_keyboard",
+    url = "https://github.com/arduino-libraries/Keyboard/archive/refs/tags/1.0.6.tar.gz",
+    sha256 = "1aa135707550c9ba9eb53660d82029f6327bafcc5cb5f9a82b7db495c88abeeb",
+    strip_prefix = "Keyboard-1.0.6",
+    build_file = "//toolchain:keyboard.BUILD",
+)
+
+http_archive(
+    name = "arduino_mouse",
+    url = "https://github.com/arduino-libraries/Mouse/archive/refs/tags/1.0.1.tar.gz",
+    sha256 = "9269148995b5053a31781a085715f86ba60d9cf209fa1f13ba108858f1f50204",
+    strip_prefix = "Mouse-1.0.1",
+    build_file = "//toolchain:mouse.BUILD",
+)
+
+# SparkFun AVR boards 1.1.13 (sourced from SparkFun's board-manager index)
+http_archive(
+    name = "sparkfun_avr",
+    url = "https://github.com/sparkfun/Arduino_Boards/raw/main/IDE_Board_Manager/sparkfunboards.1.1.13.tar.bz2",
+    sha256 = "d7af391cafc5e16830cac7c13484ef62765dd7a36aaba5f25020ce3c39617115",
+    strip_prefix = "avr",
+    build_file = "//toolchain:sparkfun_avr.BUILD",
+)
+
+http_archive(
+    name = "ezbutton",
+    url = "https://downloads.arduino.cc/libraries/github.com/ArduinoGetStarted/ezButton-1.0.6.zip",
+    sha256 = "9e45e8e46171235b6e30c04b674e523841be19da9012f91166daaccd08e10700",
+    strip_prefix = "ezButton-1.0.6",
+    build_file = "//toolchain:ezbutton.BUILD",
+)
+
+# Captures the absolute realpath of @avr_gcc so the toolchain can declare
+# both the execroot-relative and CAS-absolute include dirs as builtin.
+avr_gcc_paths(name = "avr_gcc_paths")
+
+# ── Toolchain registration ────────────────────────────────────────────────────
+
+register_toolchains("//toolchain:avr_toolchain")
