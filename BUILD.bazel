@@ -15,8 +15,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 #   arduino-cli core install arduino:avr SparkFun:avr
 #   arduino-cli lib install "ezButton"
 
-_AVR_GCC_BIN = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin"
-
 SKETCH     = "helldivers-controller.ino"
 BOARD_FQBN = "SparkFun:avr:promicro"
 
@@ -149,9 +147,8 @@ genrule(
     name = "hex",
     srcs = [":firmware"],
     outs = ["helldivers-controller.hex"],
-    cmd = "{avr_objcopy} -O ihex -R .eeprom $(location :firmware) $@".format(
-        avr_objcopy = _AVR_GCC_BIN + "/avr-objcopy",
-    ),
+    tools = ["@avr_gcc//:objcopy_files"],
+    cmd = "$(location @avr_gcc//:objcopy_files) -O ihex -R .eeprom $(location :firmware) $@",
     local = True,
     message = "Converting ELF to Intel HEX",
 )

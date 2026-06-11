@@ -1,8 +1,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_toolchain")
 load(":avr_cc_toolchain_config.bzl", "avr_toolchain_config")
 
-_AVR_GCC_BIN = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin"
-
 # ── Platform constraints ──────────────────────────────────────────────────────
 
 constraint_setting(name = "mcu")
@@ -21,21 +19,37 @@ platform(
 
 avr_toolchain_config(
     name = "avr_cc_toolchain_config",
-    avr_gcc_bin_dir = _AVR_GCC_BIN,
+    avr_gcc = "@avr_gcc//:avr_gcc_binary",
 )
 
 filegroup(name = "empty", srcs = [])
 
+# Wrapper scripts that locate the real avr-gcc binaries at runtime.
+filegroup(
+    name = "wrappers",
+    srcs = glob(["wrappers/**"]),
+)
+
+# Combined filegroups: avr-gcc binaries + wrapper scripts.
+# cc_toolchain attributes accept only a single label, so merging is done here.
+filegroup(name = "all_files",      srcs = ["@avr_gcc//:all",            ":wrappers"])
+filegroup(name = "compiler_files", srcs = ["@avr_gcc//:compiler_files", ":wrappers"])
+filegroup(name = "linker_files",   srcs = ["@avr_gcc//:linker_files",   ":wrappers"])
+filegroup(name = "ar_files",       srcs = ["@avr_gcc//:ar_files",       ":wrappers"])
+filegroup(name = "as_files",       srcs = ["@avr_gcc//:as_files",       ":wrappers"])
+filegroup(name = "objcopy_files",  srcs = ["@avr_gcc//:objcopy_files",  ":wrappers"])
+filegroup(name = "strip_files",    srcs = ["@avr_gcc//:strip_files",    ":wrappers"])
+
 cc_toolchain(
     name = "avr_cc_toolchain",
     toolchain_config = ":avr_cc_toolchain_config",
-    all_files = "@avr_gcc//:all",
-    compiler_files = "@avr_gcc//:compiler_files",
-    linker_files = "@avr_gcc//:linker_files",
-    ar_files = "@avr_gcc//:ar_files",
-    as_files = "@avr_gcc//:as_files",
-    objcopy_files = "@avr_gcc//:objcopy_files",
-    strip_files = "@avr_gcc//:strip_files",
+    all_files = ":all_files",
+    compiler_files = ":compiler_files",
+    linker_files = ":linker_files",
+    ar_files = ":ar_files",
+    as_files = ":as_files",
+    objcopy_files = ":objcopy_files",
+    strip_files = ":strip_files",
     dwp_files = ":empty",
     supports_param_files = 0,
 )

@@ -1,5 +1,11 @@
 # External BUILD file for @avr_gcc (avr-gcc 7.3.0-atmel3.6.1-arduino7, macOS x86_64).
-# Installed by arduino-cli; replace with http_archive for hermetic CI builds.
+
+# Single-file target used by avr_toolchain_config to derive all tool paths.
+filegroup(
+    name = "avr_gcc_binary",
+    srcs = ["bin/avr-gcc"],
+    visibility = ["//visibility:public"],
+)
 
 filegroup(
     name = "all",

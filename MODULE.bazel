@@ -3,7 +3,7 @@ module(
     version = "0.1.0",
 )
 
-bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.19")
 
 # ── External repository rules ─────────────────────────────────────────────────
@@ -18,14 +18,18 @@ http_archive = use_repo_rule(
     "http_archive",
 )
 
+avr_gcc_paths = use_repo_rule("//toolchain:avr_gcc_paths.bzl", "avr_gcc_paths")
+
 # ── Tool chain (avr-gcc installed by arduino-cli) ─────────────────────────────
 # Not hermetic: paths are machine-specific.
 # For CI, replace these new_local_repository entries with http_archive rules
 # that download the same packages from downloads.arduino.cc / GitHub.
 
-new_local_repository(
+http_archive(
     name = "avr_gcc",
-    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7",
+    url = "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino7-x86_64-apple-darwin14.tar.bz2",
+    sha256 = "f6ed2346953fcf88df223469088633eb86de997fa27ece117fd1ef170d69c1f8",
+    strip_prefix = "avr",
     build_file = "//toolchain:avr_gcc.BUILD",
 )
 
@@ -69,6 +73,10 @@ http_archive(
     strip_prefix = "ezButton-1.0.6",
     build_file = "//toolchain:ezbutton.BUILD",
 )
+
+# Captures the absolute realpath of @avr_gcc so the toolchain can declare
+# both the execroot-relative and CAS-absolute include dirs as builtin.
+avr_gcc_paths(name = "avr_gcc_paths")
 
 # ── Toolchain registration ────────────────────────────────────────────────────
 
