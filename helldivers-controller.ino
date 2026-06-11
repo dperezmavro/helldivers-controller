@@ -4,6 +4,12 @@
 
 // #define DEBUG
 
+#ifdef DEBUG
+#define SERIAL_DEBUG(x) Serial.println(x);
+#else
+#define SERIAL_DEBUG(x)
+#endif
+
 // Pin assignments
 constexpr int PIN_SLOT_1_BTN    = 3;
 constexpr int PIN_SLOT_1_TOGGLE = 2;
@@ -86,9 +92,7 @@ void loop() {
 
 void callStratagem(const char* primary, const char* secondary, int modePin) {
   if (millis() - lastSwitchDetectedMillis < MULTI_TRIGGER_PREVENTION_MS) {
-#ifdef DEBUG
-    Serial.println("spotted multiple bounces");
-#endif
+    SERIAL_DEBUG("spotted multiple bounces");
     return;
   }
 
@@ -101,10 +105,10 @@ void callStratagem(const char* primary, const char* secondary, int modePin) {
   const bool  isPrimary = (digitalRead(modePin) == HIGH);
   const char* stratagem = isPrimary ? primary : secondary;
 
+  SERIAL_DEBUG(isPrimary);
+  SERIAL_DEBUG(" ");
+  SERIAL_DEBUG(stratagem);
 #ifdef DEBUG
-  Serial.print(isPrimary);
-  Serial.print(" ");
-  Serial.println(stratagem);
   return;
 #endif
 
