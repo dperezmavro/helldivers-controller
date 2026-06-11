@@ -2,51 +2,33 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 # Bazel build targets for the Helldivers stratagem controller.
 #
-# Native AVR build (preferred):
+# Native AVR build:
 #   bazel build //:firmware   — compiles sketch + Arduino core with avr-gcc
 #   bazel build //:hex        — produces flashable Intel HEX from the ELF
 #
-# Prerequisites — install once:
-#   arduino-cli core install arduino:avr
-#   arduino-cli lib install "ezButton"
+# Code quality:
+#   bazel build //:lint                    — clang-tidy static analysis
+#   bazel build //:format_check            — clang-format style check
+#   bazel build //:generate_compile_commands — compile_commands.json for IDE/lint
 #
-# Legacy arduino-cli build (fallback):
-#   bazel build //:compile    — wraps arduino-cli (requires SparkFun:avr core)
+# Prerequisites — install once via arduino-cli:
+#   arduino-cli core install arduino:avr SparkFun:avr
+#   arduino-cli lib install "ezButton"
 
 _AVR_GCC_BIN = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin"
 
-SKETCH = "helldivers-controller.ino"
+SKETCH     = "helldivers-controller.ino"
 BOARD_FQBN = "SparkFun:avr:promicro"
 
 # Homebrew LLVM tools (keg-only, not linked into /usr/local/bin by default).
-CLANG_TIDY = "/usr/local/opt/llvm/bin/clang-tidy"
+CLANG_TIDY   = "/usr/local/opt/llvm/bin/clang-tidy"
 CLANG_FORMAT = "/usr/local/opt/llvm/bin/clang-format"
-
-# ---------------------------------------------------------------------------
-# bazel build //:compile
-#
-# Compiles the sketch to a .hex file ready to flash.
-# ---------------------------------------------------------------------------
-genrule(
-    name = "compile",
-    srcs = [SKETCH],
-    outs = [SKETCH + ".hex"],
-    cmd = """
-        arduino-cli compile \\
-            --fqbn {fqbn} \\
-            --output-dir $(@D) \\
-            $(location {sketch})
-    """.format(fqbn = BOARD_FQBN, sketch = SKETCH),
-    local = True,
-    message = "Compiling sketch with arduino-cli",
-)
 
 # ---------------------------------------------------------------------------
 # bazel build //:generate_compile_commands
 #
-# Emits compile_commands.json in the workspace root so that clang-tidy and
-# IDEs can resolve Arduino/AVR headers.  Run this before :lint for best
-# results.  Uses avr-gcc's -MJ flag to capture per-TU compilation databases.
+# Emits compile_commands.json so that clang-tidy and IDEs can resolve
+# Arduino/AVR headers accurately.  Run this before :lint for best results.
 # ---------------------------------------------------------------------------
 genrule(
     name = "generate_compile_commands",
@@ -60,7 +42,6 @@ genrule(
             --output-dir $$TMP_DIR \\
             $(location {sketch}) \\
             2>/dev/null || true
-        # Wrap single-object fragment in a JSON array
         if [ -f "$$TMP_DIR/cmd.json" ]; then
             echo "[" > $@
             cat "$$TMP_DIR/cmd.json" >> $@
@@ -77,11 +58,8 @@ genrule(
 # bazel build //:lint
 #
 # Runs clang-tidy on the sketch.  If compile_commands.json exists in the
-# workspace root (from :generate_compile_commands), it is used for accurate
-# include resolution.  Otherwise a minimal fallback flag set is used.
-#
-# Lint findings are written to bazel-bin/lint.log and echoed to stdout.
-# The target fails only if clang-tidy exits non-zero (i.e. errors found).
+# workspace root (produced by :generate_compile_commands), it is used for
+# accurate include resolution.  Otherwise falls back to a minimal flag set.
 # ---------------------------------------------------------------------------
 genrule(
     name = "lint",
@@ -99,10 +77,10 @@ genrule(
             {clang_tidy} "$$SKETCH" \\
                 -- \\
                 -x c++ \\
-                -std=c++17 \\
+                -std=gnu++11 \\
                 -DARDUINO=10607 \\
                 -DARDUINO_AVR_PROMICRO \\
-                -DF_CPU=16000000L \\
+                -DF_CPU=8000000L \\
                 -isystem "$$STUBS" \\
                 2>&1 | tee $@
         fi
@@ -115,7 +93,7 @@ genrule(
 # bazel build //:format_check
 #
 # Verifies that the sketch matches .clang-format style.
-# Exits non-zero (and fails the build) if any formatting differs.
+# Exits non-zero if any formatting differs.
 # To auto-fix: clang-format -i helldivers-controller.ino
 # ---------------------------------------------------------------------------
 genrule(
@@ -163,9 +141,9 @@ cc_binary(
 # ---------------------------------------------------------------------------
 # bazel build //:hex
 #
-# Converts the ELF produced by :firmware into an Intel HEX file ready to flash
-# with avrdude:
-#   avrdude -c avr109 -p atmega32u4 -P /dev/cu.usbmodem* -U flash:w:bazel-bin/helldivers-controller.hex
+# Converts the ELF produced by :firmware into an Intel HEX file ready to flash:
+#   avrdude -c avr109 -p atmega32u4 -P /dev/cu.usbmodem* \
+#           -U flash:w:bazel-bin/helldivers-controller.hex
 # ---------------------------------------------------------------------------
 genrule(
     name = "hex",
