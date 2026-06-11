@@ -5,14 +5,7 @@
 
 #include "stratagem-assignments.h"
 #include "time-constants.h"
-
-// #define DEBUG
-
-#ifdef DEBUG
-#define SERIAL_DEBUG(x) Serial.println(x);
-#else
-#define SERIAL_DEBUG(x)
-#endif
+#include "debug.h"
 
 ezButton slot1(PIN_SLOT_1_BTN, INPUT_PULLUP);
 ezButton slot2(PIN_SLOT_2_BTN, INPUT_PULLUP);
