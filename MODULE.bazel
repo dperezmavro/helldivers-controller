@@ -13,6 +13,11 @@ new_local_repository = use_repo_rule(
     "new_local_repository",
 )
 
+http_archive = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:http.bzl",
+    "http_archive",
+)
+
 # ── Tool chain (avr-gcc installed by arduino-cli) ─────────────────────────────
 # Not hermetic: paths are machine-specific.
 # For CI, replace these new_local_repository entries with http_archive rules
@@ -32,15 +37,19 @@ new_local_repository(
     build_file = "//toolchain:core.BUILD",
 )
 
-new_local_repository(
+http_archive(
     name = "arduino_keyboard",
-    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/libraries/Keyboard",
+    url = "https://github.com/arduino-libraries/Keyboard/archive/refs/tags/1.0.6.tar.gz",
+    sha256 = "1aa135707550c9ba9eb53660d82029f6327bafcc5cb5f9a82b7db495c88abeeb",
+    strip_prefix = "Keyboard-1.0.6",
     build_file = "//toolchain:keyboard.BUILD",
 )
 
-new_local_repository(
+http_archive(
     name = "arduino_mouse",
-    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/libraries/Mouse",
+    url = "https://github.com/arduino-libraries/Mouse/archive/refs/tags/1.0.1.tar.gz",
+    sha256 = "9269148995b5053a31781a085715f86ba60d9cf209fa1f13ba108858f1f50204",
+    strip_prefix = "Mouse-1.0.1",
     build_file = "//toolchain:mouse.BUILD",
 )
 
