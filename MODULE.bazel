@@ -31,9 +31,11 @@ new_local_repository(
 
 # ── Arduino libraries (installed by arduino-cli) ─────────────────────────────
 
-new_local_repository(
+http_archive(
     name = "arduino_avr_core",
-    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/hardware/avr/1.8.8",
+    url = "https://downloads.arduino.cc/cores/staging/avr-1.8.8.tar.bz2",
+    sha256 = "a234c2a43dcd01ce54be665806f183b8e6ec4e966d2e3e0c3358b63023d6390c",
+    strip_prefix = "ArduinoCore-avr-1.8.8",
     build_file = "//toolchain:core.BUILD",
 )
 
