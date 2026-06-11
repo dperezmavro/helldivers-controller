@@ -129,8 +129,9 @@ cc_library(
     name = "headers",
     hdrs = [
         "src/stratagem-assignments.h",
-        "src/time-constants.h"
+        "src/time-constants.h",
     ],
+    strip_include_prefix = "src",
     visibility = ["//visibility:public"],
 )
 
