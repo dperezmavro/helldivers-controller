@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Keyboard.h>
 #include <Mouse.h>
 #include <ezButton.h>

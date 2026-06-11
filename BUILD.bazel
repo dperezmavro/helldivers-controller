@@ -1,14 +1,22 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
 # Bazel build targets for the Helldivers stratagem controller.
 #
-# Prerequisites — install once via arduino-cli:
-#   arduino-cli core install SparkFun:avr
+# Native AVR build (preferred):
+#   bazel build //:firmware   — compiles sketch + Arduino core with avr-gcc
+#   bazel build //:hex        — produces flashable Intel HEX from the ELF
+#
+# Prerequisites — install once:
+#   arduino-cli core install arduino:avr
 #   arduino-cli lib install "ezButton"
 #
-# Board FQBN: SparkFun Pro Micro 5V/16MHz.
-# Change to "SparkFun:avr:promicro3V3" for the 3.3V/8MHz variant.
+# Legacy arduino-cli build (fallback):
+#   bazel build //:compile    — wraps arduino-cli (requires SparkFun:avr core)
 
+_AVR_GCC_BIN = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin"
+
+SKETCH = "helldivers-controller.cpp"
 BOARD_FQBN = "SparkFun:avr:promicro"
-SKETCH = "helldivers-controller.ino"
 
 # Homebrew LLVM tools (keg-only, not linked into /usr/local/bin by default).
 CLANG_TIDY = "/usr/local/opt/llvm/bin/clang-tidy"
@@ -80,7 +88,7 @@ genrule(
     srcs = [
         SKETCH,
         ".clang-tidy",
-    ] + glob(["stubs/**"]),
+    ] + glob(["stubs/**"], allow_empty = True),
     outs = ["lint.log"],
     cmd = """
         SKETCH=$(location {sketch})
@@ -90,13 +98,11 @@ genrule(
         else
             {clang_tidy} "$$SKETCH" \\
                 -- \\
-                -x c++ \\
                 -std=c++17 \\
                 -DARDUINO=10607 \\
                 -DARDUINO_AVR_PROMICRO \\
                 -DF_CPU=16000000L \\
                 -isystem "$$STUBS" \\
-                -include Arduino.h \\
                 2>&1 | tee $@
         fi
     """.format(sketch = SKETCH, clang_tidy = CLANG_TIDY),
@@ -109,7 +115,7 @@ genrule(
 #
 # Verifies that the sketch matches .clang-format style.
 # Exits non-zero (and fails the build) if any formatting differs.
-# To auto-fix: clang-format -i helldivers-controller.ino
+# To auto-fix: clang-format -i helldivers-controller.cpp
 # ---------------------------------------------------------------------------
 genrule(
     name = "format_check",
@@ -124,4 +130,39 @@ genrule(
     """.format(sketch = SKETCH, clang_format = CLANG_FORMAT),
     local = True,
     message = "Checking formatting with clang-format",
+)
+
+# ---------------------------------------------------------------------------
+# bazel build //:firmware
+#
+# Compiles the sketch and all Arduino dependencies (core, HID, Keyboard, Mouse,
+# ezButton) using avr-gcc.  The output is an ELF binary suitable for objcopy.
+# ---------------------------------------------------------------------------
+cc_binary(
+    name = "firmware",
+    srcs = [SKETCH],
+    deps = [
+        "@arduino_keyboard//:keyboard",
+        "@arduino_mouse//:mouse",
+        "@ezbutton//:ezbutton",
+    ],
+    linkstatic = True,
+)
+
+# ---------------------------------------------------------------------------
+# bazel build //:hex
+#
+# Converts the ELF produced by :firmware into an Intel HEX file ready to flash
+# with avrdude:
+#   avrdude -c avr109 -p atmega32u4 -P /dev/cu.usbmodem* -U flash:w:bazel-bin/helldivers-controller.hex
+# ---------------------------------------------------------------------------
+genrule(
+    name = "hex",
+    srcs = [":firmware"],
+    outs = ["helldivers-controller.hex"],
+    cmd = "{avr_objcopy} -O ihex -R .eeprom $(location :firmware) $@".format(
+        avr_objcopy = _AVR_GCC_BIN + "/avr-objcopy",
+    ),
+    local = True,
+    message = "Converting ELF to Intel HEX",
 )

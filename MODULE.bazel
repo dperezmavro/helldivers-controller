@@ -2,3 +2,55 @@ module(
     name = "helldivers_controller",
     version = "0.1.0",
 )
+
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "rules_cc", version = "0.2.19")
+
+# ── External repository rules ─────────────────────────────────────────────────
+
+new_local_repository = use_repo_rule(
+    "@bazel_tools//tools/build_defs/repo:local.bzl",
+    "new_local_repository",
+)
+
+# ── Tool chain (avr-gcc installed by arduino-cli) ─────────────────────────────
+# Not hermetic: paths are machine-specific.
+# For CI, replace these new_local_repository entries with http_archive rules
+# that download the same packages from downloads.arduino.cc / GitHub.
+
+new_local_repository(
+    name = "avr_gcc",
+    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7",
+    build_file = "//toolchain:avr_gcc.BUILD",
+)
+
+# ── Arduino libraries (installed by arduino-cli) ─────────────────────────────
+
+new_local_repository(
+    name = "arduino_avr_core",
+    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/hardware/avr/1.8.8",
+    build_file = "//toolchain:core.BUILD",
+)
+
+new_local_repository(
+    name = "arduino_keyboard",
+    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/libraries/Keyboard",
+    build_file = "//toolchain:keyboard.BUILD",
+)
+
+new_local_repository(
+    name = "arduino_mouse",
+    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/libraries/Mouse",
+    build_file = "//toolchain:mouse.BUILD",
+)
+
+# Install with: arduino-cli lib install "ezButton"
+new_local_repository(
+    name = "ezbutton",
+    path = "/Users/dionisioperez-mavrogenis/Documents/Arduino/libraries/ezButton",
+    build_file = "//toolchain:ezbutton.BUILD",
+)
+
+# ── Toolchain registration ────────────────────────────────────────────────────
+
+register_toolchains("//toolchain:avr_toolchain")
