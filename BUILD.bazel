@@ -15,7 +15,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 #   arduino-cli core install arduino:avr SparkFun:avr
 #   arduino-cli lib install "ezButton"
 
-SKETCH     = "helldivers-controller.ino"
+SKETCH     = "src/helldivers-controller.ino"
 BOARD_FQBN = "SparkFun:avr:promicro"
 
 # Homebrew LLVM tools (keg-only, not linked into /usr/local/bin by default).
@@ -127,7 +127,10 @@ genrule(
 
 cc_library(
     name = "headers",
-    hdrs = ["stratagem-assignments.h"],
+    hdrs = [
+        "src/stratagem-assignments.h",
+        "src/time-constants.h"
+    ],
     visibility = ["//visibility:public"],
 )
 

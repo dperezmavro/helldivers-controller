@@ -4,6 +4,7 @@
 #include <ezButton.h>
 
 #include "stratagem-assignments.h"
+#include "time-constants.h"
 
 // #define DEBUG
 
@@ -13,29 +14,10 @@
 #define SERIAL_DEBUG(x)
 #endif
 
-// Pin assignments
-constexpr int PIN_SLOT_1_BTN    = 3;
-constexpr int PIN_SLOT_1_TOGGLE = 2;
-constexpr int PIN_SLOT_2_BTN    = 5;
-constexpr int PIN_SLOT_2_TOGGLE = 4;
-constexpr int PIN_SLOT_3_BTN    = 7;
-constexpr int PIN_SLOT_3_TOGGLE = 6;
-constexpr int PIN_SLOT_4_BTN    = 8;
-constexpr int PIN_SLOT_4_TOGGLE = 9;
-
-// Timing (milliseconds)
-constexpr unsigned long WAIT_BETWEEN_KEY_PRESS_MS   = 75;
-constexpr unsigned long DEBOUNCE_TIME_MS            = 50;
-constexpr unsigned long LED_FEEDBACK_MS             = 50;
-constexpr unsigned long MULTI_TRIGGER_PREVENTION_MS = 300;
-
 ezButton slot1(PIN_SLOT_1_BTN, INPUT_PULLUP);
 ezButton slot2(PIN_SLOT_2_BTN, INPUT_PULLUP);
 ezButton slot3(PIN_SLOT_3_BTN, INPUT_PULLUP);
 ezButton slot4(PIN_SLOT_4_BTN, INPUT_PULLUP);
-
-// unsigned long to match millis() return type and avoid overflow in subtraction
-unsigned long lastSwitchDetectedMillis = 0;
 
 void callStratagem(const char* primary, const char* secondary, int modePin);
 
