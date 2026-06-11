@@ -66,11 +66,10 @@ genrule(
     srcs = [
         SKETCH,
         ".clang-tidy",
-    ] + glob(["stubs/**"], allow_empty = True),
+    ] + glob(["stubs/**"]),
     outs = ["lint.log"],
     cmd = """
         SKETCH=$(location {sketch})
-        STUBS=$$(pwd)/stubs
         if [ -f compile_commands.json ]; then
             {clang_tidy} "$$SKETCH" 2>&1 | tee $@
         else
@@ -80,8 +79,9 @@ genrule(
                 -std=gnu++11 \\
                 -DARDUINO=10607 \\
                 -DARDUINO_AVR_PROMICRO \\
+                -DARDUINO_ARCH_AVR \\
                 -DF_CPU=8000000L \\
-                -isystem "$$STUBS" \\
+                -isystem $$(pwd)/stubs \\
                 2>&1 | tee $@
         fi
     """.format(sketch = SKETCH, clang_tidy = CLANG_TIDY),
