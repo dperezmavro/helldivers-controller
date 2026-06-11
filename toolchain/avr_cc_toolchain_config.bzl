@@ -54,7 +54,7 @@ def _impl(ctx):
                 actions = _COMPILE_ACTIONS,
                 flag_groups = [flag_group(flags = [
                     "-DF_CPU=16000000L",
-                    "-DARDUINO=10808",
+                    "-DARDUINO=10607",
                     "-DARDUINO_AVR_PROMICRO",
                     "-DARDUINO_ARCH_AVR",
                     "-DUSB_VID=0x1B4F",
@@ -62,6 +62,11 @@ def _impl(ctx):
                     "-Os",
                     "-ffunction-sections",
                     "-fdata-sections",
+                    "-flto",
+                    # fat LTO embeds regular object code alongside the LTO IR so
+                    # the linker can resolve symbols from .a archives normally while
+                    # still doing whole-program optimization at link time.
+                    "-ffat-lto-objects",
                 ])],
             ),
         ],
@@ -73,9 +78,11 @@ def _impl(ctx):
         flag_sets = [flag_set(
             actions = [ACTION_NAMES.cpp_compile],
             flag_groups = [flag_group(flags = [
-                "-std=gnu++17",
+                "-std=gnu++11",
+                "-fpermissive",
                 "-fno-exceptions",
                 "-fno-threadsafe-statics",
+                "-Wno-error=narrowing",
             ])],
         )],
     )
@@ -96,6 +103,7 @@ def _impl(ctx):
             actions = _LINK_ACTIONS,
             flag_groups = [flag_group(flags = [
                 "-Os",
+                "-flto",
                 "-Wl,--gc-sections",
             ])],
         )],
