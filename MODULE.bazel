@@ -44,6 +44,13 @@ new_local_repository(
     build_file = "//toolchain:mouse.BUILD",
 )
 
+# SparkFun AVR boards 1.1.13 (install with: arduino-cli core install SparkFun:avr)
+new_local_repository(
+    name = "sparkfun_avr",
+    path = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/SparkFun/hardware/avr/1.1.13",
+    build_file = "//toolchain:sparkfun_avr.BUILD",
+)
+
 # Install with: arduino-cli lib install "ezButton"
 new_local_repository(
     name = "ezbutton",

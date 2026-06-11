@@ -1,8 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 # External BUILD file for @arduino_avr_core (Arduino AVR Core 1.8.8).
-# Uses the Arduino Micro (ATmega32U4) variant, which is pin-compatible with
-# the SparkFun Pro Micro for the digital pins this project uses (2-9).
+# The board variant (pins_arduino.h) comes from @sparkfun_avr//:promicro_variant.
 
 cc_library(
     name = "arduino_core",
@@ -11,16 +10,11 @@ cc_library(
         "cores/arduino/*.cpp",
         "cores/arduino/*.S",
     ]),
-    hdrs = glob([
-        "cores/arduino/*.h",
-        "variants/**/*.h",  # micro/pins_arduino.h includes ../leonardo/pins_arduino.h
-    ]) + [
+    hdrs = glob(["cores/arduino/*.h"]) + [
         "cores/arduino/new",  # extensionless header included by new.cpp
     ],
-    includes = [
-        "cores/arduino",
-        "variants/micro",
-    ],
+    includes = ["cores/arduino"],
+    deps = ["@sparkfun_avr//:promicro_variant"],
     visibility = ["//visibility:public"],
 )
 

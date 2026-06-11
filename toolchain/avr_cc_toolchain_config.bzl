@@ -53,12 +53,12 @@ def _impl(ctx):
             flag_set(
                 actions = _COMPILE_ACTIONS,
                 flag_groups = [flag_group(flags = [
-                    "-DF_CPU=16000000L",
+                    "-DF_CPU=8000000L",
                     "-DARDUINO=10607",
                     "-DARDUINO_AVR_PROMICRO",
                     "-DARDUINO_ARCH_AVR",
-                    "-DUSB_VID=0x1B4F",
-                    "-DUSB_PID=0x9205",
+                    "-DUSB_VID=0x1b4f",
+                    "-DUSB_PID=0x9204",
                     "-Os",
                     "-ffunction-sections",
                     "-fdata-sections",
