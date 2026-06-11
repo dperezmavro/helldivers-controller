@@ -60,10 +60,11 @@ new_local_repository(
     build_file = "//toolchain:sparkfun_avr.BUILD",
 )
 
-# Install with: arduino-cli lib install "ezButton"
-new_local_repository(
+http_archive(
     name = "ezbutton",
-    path = "/Users/dionisioperez-mavrogenis/Documents/Arduino/libraries/ezButton",
+    url = "https://downloads.arduino.cc/libraries/github.com/ArduinoGetStarted/ezButton-1.0.6.zip",
+    sha256 = "9e45e8e46171235b6e30c04b674e523841be19da9012f91166daaccd08e10700",
+    strip_prefix = "ezButton-1.0.6",
     build_file = "//toolchain:ezbutton.BUILD",
 )
 
