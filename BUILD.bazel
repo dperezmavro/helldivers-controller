@@ -15,7 +15,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 _AVR_GCC_BIN = "/Users/dionisioperez-mavrogenis/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin"
 
-SKETCH = "helldivers-controller.cpp"
+SKETCH = "helldivers-controller.ino"
 BOARD_FQBN = "SparkFun:avr:promicro"
 
 # Homebrew LLVM tools (keg-only, not linked into /usr/local/bin by default).
@@ -98,6 +98,7 @@ genrule(
         else
             {clang_tidy} "$$SKETCH" \\
                 -- \\
+                -x c++ \\
                 -std=c++17 \\
                 -DARDUINO=10607 \\
                 -DARDUINO_AVR_PROMICRO \\
@@ -115,7 +116,7 @@ genrule(
 #
 # Verifies that the sketch matches .clang-format style.
 # Exits non-zero (and fails the build) if any formatting differs.
-# To auto-fix: clang-format -i helldivers-controller.cpp
+# To auto-fix: clang-format -i helldivers-controller.ino
 # ---------------------------------------------------------------------------
 genrule(
     name = "format_check",
@@ -137,10 +138,20 @@ genrule(
 #
 # Compiles the sketch and all Arduino dependencies (core, HID, Keyboard, Mouse,
 # ezButton) using avr-gcc.  The output is an ELF binary suitable for objcopy.
+#
+# Bazel's cc rules only compile files with recognised C++ extensions; sketch_cpp
+# exists solely to give Bazel a .cpp handle on the .ino source.
 # ---------------------------------------------------------------------------
+genrule(
+    name = "sketch_cpp",
+    srcs = [SKETCH],
+    outs = ["helldivers_controller.cpp"],
+    cmd = "cp $< $@",
+)
+
 cc_binary(
     name = "firmware",
-    srcs = [SKETCH],
+    srcs = [":sketch_cpp"],
     deps = [
         "@arduino_keyboard//:keyboard",
         "@arduino_mouse//:mouse",
