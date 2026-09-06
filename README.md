@@ -13,6 +13,8 @@ I made the design choice to have the Pro Micro attach to the board using pin hea
 ## Schematic
 ![image](graphics/schematic.PNG)
 
+Each channel has one mode toggle (SW1, SW3, SW5, SW7) and one macro button (SW2, SW4, SW6, SW8). The nets are labelled `MODEn` and `BTNn`; the design notes on the sheet explain the wiring and the pin map. The Pro Micro symbol and the custom footprints (Pro Micro, AEDIKO SPDT toggle, logo) are project-local libraries in `controller/lib`, registered in `controller/sym-lib-table` and `controller/fp-lib-table`, so the project opens without any extra library setup.
+
 ## 3d render
 This is what the current board render looks like when 3D
 
@@ -36,7 +38,7 @@ Keycaps are a 1u width (roughly 17mm) and the current spacing is too tight as I 
 
 ## The pinout for the 4th button and switch is reversed. 
 
-This is not so much a bug, as much as a very likely gotcha (and it did get me!). Due to board layout and via routing, I found it easier to switch the pin order for the 4th button and toggle switch combination. The board still works as intended, but this is something to keep in mind when programming. 
+This is not so much a bug, as much as a very likely gotcha (and it did get me!). Due to board layout and via routing, I found it easier to switch the pin order for the 4th button and toggle switch combination. The board still works as intended, but this is something to keep in mind when programming. In the schematic this shows as `BTN4` on D8 and `MODE4` on D9, whereas the other channels have the toggle on the lower pin number. 
 
 The 3rd and 4th button vias are also very close to each other, and this might make manufacturing hard/impossible for some providers. 
 
