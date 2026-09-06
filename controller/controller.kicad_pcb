@@ -140,12 +140,35 @@
 			(outputdirectory "gerbers/")
 		)
 	)
-	(footprint "Arduino:Sparkfun_Pro_Micro"
+	(net 0 "")
+	(net 1 "GND")
+	(net 2 "+5V")
+	(net 3 "/MODE3")
+	(net 4 "/MODE2")
+	(net 5 "/MODE1")
+	(net 6 "/MODE4")
+	(net 7 "/BTN3")
+	(net 8 "/BTN4")
+	(net 9 "/BTN2")
+	(net 10 "/BTN1")
+	(net 11 "unconnected-(U1-D15-Pad16)")
+	(net 12 "unconnected-(U1-RST-Pad22)")
+	(net 13 "unconnected-(U1-D0{slash}RX-Pad2)")
+	(net 14 "unconnected-(U1-D18{slash}A0-Pad17)")
+	(net 15 "unconnected-(U1-D1{slash}TX-Pad1)")
+	(net 16 "unconnected-(U1-RAW-Pad24)")
+	(net 17 "unconnected-(U1-D21{slash}A3-Pad20)")
+	(net 18 "unconnected-(U1-D19{slash}A1-Pad18)")
+	(net 19 "unconnected-(U1-D14-Pad15)")
+	(net 20 "unconnected-(U1-D20{slash}A2-Pad19)")
+	(net 21 "unconnected-(U1-~D10{slash}A10-Pad13)")
+	(net 22 "unconnected-(U1-D16-Pad14)")
+	(footprint "controller:SparkFun_Pro_Micro"
 		(layer "F.Cu")
+		(descr "SparkFun Pro Micro (ATmega32U4, 5V/16MHz) on 2x12 0.1in pin headers, DEV-12640")
+		(tags "SparkFun Pro Micro Arduino ATmega32U4 module header")
 		(uuid "047644f5-1a53-4fba-ae10-b492307b6cfe")
 		(at 147.4 59 -90)
-		(descr "Sparkfun Pro Micro")
-		(tags "Arduino Sparkfun Pro Micro")
 		(property "Reference" "U1"
 			(at 7.62 -5.08 270)
 			(layer "F.SilkS")
@@ -158,7 +181,7 @@
 				)
 			)
 		)
-		(property "Value" "Sparkfun_Pro_Micro"
+		(property "Value" "SparkFun Pro Micro"
 			(at 8.89 19.05 0)
 			(layer "F.Fab")
 			(uuid "4a6cc784-116d-44cf-8afb-fd57b8ff3594")
@@ -181,7 +204,7 @@
 				)
 			)
 		)
-		(property "Description" "Sparkfun Pro Micro"
+		(property "Description" "SparkFun Pro Micro: ATmega32U4 USB development board, 5V/16MHz variant, 2x12 pin 0.1in headers"
 			(at 0 0 270)
 			(layer "F.Fab")
 			(hide yes)
@@ -539,7 +562,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW4-B)")
+			(net 5 "/MODE1")
 			(pinfunction "D2")
 			(pintype "bidirectional")
 			(uuid "6e1a9d9e-39b5-46a7-94d6-ebb305b0d1ad")
@@ -550,7 +573,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-~D3)")
+			(net 10 "/BTN1")
 			(pinfunction "~D3")
 			(pintype "bidirectional")
 			(uuid "bfc71209-0206-41c5-9f14-2c1bce6023ab")
@@ -561,7 +584,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW3-B)")
+			(net 4 "/MODE2")
 			(pinfunction "D4/A6")
 			(pintype "bidirectional")
 			(uuid "51aae7d7-ce84-4531-a171-889f97fc652d")
@@ -572,7 +595,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-~D5)")
+			(net 9 "/BTN2")
 			(pinfunction "~D5")
 			(pintype "bidirectional")
 			(uuid "5550e8c2-7061-4321-9c7d-adf008537955")
@@ -583,7 +606,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW2-B)")
+			(net 3 "/MODE3")
 			(pinfunction "~D6/A7")
 			(pintype "bidirectional")
 			(uuid "955ee5f7-5537-4e9e-8a6d-c5389750e761")
@@ -594,7 +617,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-D7)")
+			(net 7 "/BTN3")
 			(pinfunction "D7")
 			(pintype "bidirectional")
 			(uuid "42ad8264-1238-4bfb-96b7-ad6971ff3271")
@@ -605,7 +628,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-D8{slash}A8)")
+			(net 8 "/BTN4")
 			(pinfunction "D8/A8")
 			(pintype "bidirectional")
 			(uuid "968d529c-7808-4973-b55d-419e266b052e")
@@ -616,7 +639,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW5-B)")
+			(net 6 "/MODE4")
 			(pinfunction "~D9/A9")
 			(pintype "bidirectional")
 			(uuid "557b6139-eea0-4c88-8ebf-301937d50833")
@@ -783,7 +806,7 @@
 		(at 119.54 98)
 		(descr "Cherry MX keyswitch, 1.50u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf")
 		(tags "Cherry MX keyswitch 1.50u plate")
-		(property "Reference" "SW11"
+		(property "Reference" "SW2"
 			(at -2.54 -2.794 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -795,7 +818,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "Cherry MX 1.5u"
 			(at -2.54 12.954 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -820,7 +843,7 @@
 				)
 			)
 		)
-		(property "Description" "Push button switch, generic, two pins"
+		(property "Description" "Cherry MX compatible keyboard switch, plate mount, 1.5u"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1022,7 +1045,7 @@
 			(drill 1.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-~D3)")
+			(net 10 "/BTN1")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "36c7b3f3-23c8-40fb-943a-893fa0163c2f")
@@ -1057,7 +1080,7 @@
 		(at 154.873333 98)
 		(descr "Cherry MX keyswitch, 1.50u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf")
 		(tags "Cherry MX keyswitch 1.50u plate")
-		(property "Reference" "SW8"
+		(property "Reference" "SW6"
 			(at -2.54 -2.794 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -1069,7 +1092,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "Cherry MX 1.5u"
 			(at -2.54 12.954 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -1094,7 +1117,7 @@
 				)
 			)
 		)
-		(property "Description" "Push button switch, generic, two pins"
+		(property "Description" "Cherry MX compatible keyboard switch, plate mount, 1.5u"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1296,7 +1319,7 @@
 			(drill 1.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-D7)")
+			(net 7 "/BTN3")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "dfe76dc4-38ff-4319-b999-174a8ad7adbb")
@@ -1331,7 +1354,7 @@
 		(at 178 112)
 		(descr "Mounting Hole 2.2mm, no annular, M2")
 		(tags "mounting hole 2.2mm no annular m2")
-		(property "Reference" "REF**"
+		(property "Reference" "H1"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -1380,8 +1403,7 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
-		(duplicate_pad_numbers_are_jumpers no)
+		(attr board_only exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.2 0)
@@ -1424,11 +1446,13 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "AEDIKO-Micro-Toggle-Switch-3-Pin-SPDT-on-on:spdt-on-on-micro-toggle-switch"
+	(footprint "controller:SW_Toggle_SPDT_AEDIKO_Micro"
 		(layer "F.Cu")
+		(descr "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole, oval pads on 4.8mm pitch; custom footprint measured from the part")
+		(tags "toggle switch SPDT on-on through-hole AEDIKO")
 		(uuid "376ce74f-0d5f-41d2-9878-416defb08e69")
 		(at 152.333333 87 -90)
-		(property "Reference" "SW2"
+		(property "Reference" "SW5"
 			(at 0 -0.5 270)
 			(unlocked yes)
 			(layer "F.SilkS")
@@ -1441,7 +1465,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_SPDT"
+		(property "Value" "AEDIKO SPDT on-on micro toggle"
 			(at 0 1 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1466,7 +1490,7 @@
 				)
 			)
 		)
-		(property "Description" "Switch, single pole double throw"
+		(property "Description" "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole; custom project footprint"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1554,7 +1578,7 @@
 			(drill oval 1 2.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW2-B)")
+			(net 3 "/MODE3")
 			(pinfunction "B")
 			(pintype "passive")
 			(uuid "7aaf9d9d-12be-4f54-982b-b037199dfd10")
@@ -1634,7 +1658,7 @@
 		(at 109 56)
 		(descr "Mounting Hole 2.2mm, no annular, M2")
 		(tags "mounting hole 2.2mm no annular m2")
-		(property "Reference" "REF**"
+		(property "Reference" "H2"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -1683,8 +1707,7 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
-		(duplicate_pad_numbers_are_jumpers no)
+		(attr board_only exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.2 0)
@@ -1733,7 +1756,7 @@
 		(at 177 56)
 		(descr "Mounting Hole 2.2mm, no annular, M2")
 		(tags "mounting hole 2.2mm no annular m2")
-		(property "Reference" "REF**"
+		(property "Reference" "H3"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -1782,8 +1805,7 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
-		(duplicate_pad_numbers_are_jumpers no)
+		(attr board_only exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.2 0)
@@ -1826,11 +1848,13 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "LOGO"
+	(footprint "controller:Logo"
 		(layer "F.Cu")
+		(descr "Helldivers logo, silkscreen graphic")
+		(tags "logo silkscreen graphic")
 		(uuid "5d67e074-34ce-4a67-93ae-9411d930f1ed")
 		(at 163 70.6)
-		(property "Reference" "G***"
+		(property "Reference" "G1"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -2345,7 +2369,7 @@
 		(at 172.54 98)
 		(descr "Cherry MX keyswitch, 1.50u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf")
 		(tags "Cherry MX keyswitch 1.50u plate")
-		(property "Reference" "SW9"
+		(property "Reference" "SW8"
 			(at -2.54 -2.794 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -2357,7 +2381,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "Cherry MX 1.5u"
 			(at -2.54 12.954 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -2382,7 +2406,7 @@
 				)
 			)
 		)
-		(property "Description" "Push button switch, generic, two pins"
+		(property "Description" "Cherry MX compatible keyboard switch, plate mount, 1.5u"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2584,7 +2608,7 @@
 			(drill 1.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-D8{slash}A8)")
+			(net 8 "/BTN4")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "f782c83a-7f8a-43fa-935a-94c2c0d73a0e")
@@ -2613,11 +2637,13 @@
 			)
 		)
 	)
-	(footprint "AEDIKO-Micro-Toggle-Switch-3-Pin-SPDT-on-on:spdt-on-on-micro-toggle-switch"
+	(footprint "controller:SW_Toggle_SPDT_AEDIKO_Micro"
 		(layer "F.Cu")
+		(descr "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole, oval pads on 4.8mm pitch; custom footprint measured from the part")
+		(tags "toggle switch SPDT on-on through-hole AEDIKO")
 		(uuid "853172f2-1538-4955-8af4-2dba0081e648")
 		(at 117 87 -90)
-		(property "Reference" "SW4"
+		(property "Reference" "SW1"
 			(at 0 -0.5 270)
 			(unlocked yes)
 			(layer "F.SilkS")
@@ -2630,7 +2656,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_SPDT"
+		(property "Value" "AEDIKO SPDT on-on micro toggle"
 			(at 0 1 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2655,7 +2681,7 @@
 				)
 			)
 		)
-		(property "Description" "Switch, single pole double throw"
+		(property "Description" "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole; custom project footprint"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2743,7 +2769,7 @@
 			(drill oval 1 2.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW4-B)")
+			(net 5 "/MODE1")
 			(pinfunction "B")
 			(pintype "passive")
 			(uuid "2f3ec30b-e502-4bed-b2fe-36eed90992ab")
@@ -2817,8 +2843,10 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "AEDIKO-Micro-Toggle-Switch-3-Pin-SPDT-on-on:spdt-on-on-micro-toggle-switch"
+	(footprint "controller:SW_Toggle_SPDT_AEDIKO_Micro"
 		(layer "F.Cu")
+		(descr "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole, oval pads on 4.8mm pitch; custom footprint measured from the part")
+		(tags "toggle switch SPDT on-on through-hole AEDIKO")
 		(uuid "9ab1fd45-3af7-44dc-8414-4698359c73ab")
 		(at 134.666667 87 -90)
 		(property "Reference" "SW3"
@@ -2834,7 +2862,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_SPDT"
+		(property "Value" "AEDIKO SPDT on-on micro toggle"
 			(at 0 1 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2859,7 +2887,7 @@
 				)
 			)
 		)
-		(property "Description" "Switch, single pole double throw"
+		(property "Description" "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole; custom project footprint"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2947,7 +2975,7 @@
 			(drill oval 1 2.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW3-B)")
+			(net 4 "/MODE2")
 			(pinfunction "B")
 			(pintype "passive")
 			(uuid "86407c78-0e2b-4f5d-af0d-c2d7acdbeb19")
@@ -3027,7 +3055,7 @@
 		(at 109 112)
 		(descr "Mounting Hole 2.2mm, no annular, M2")
 		(tags "mounting hole 2.2mm no annular m2")
-		(property "Reference" "REF**"
+		(property "Reference" "H4"
 			(at 0 -3.2 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -3076,8 +3104,7 @@
 				)
 			)
 		)
-		(attr exclude_from_pos_files exclude_from_bom)
-		(duplicate_pad_numbers_are_jumpers no)
+		(attr board_only exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.2 0)
@@ -3126,7 +3153,7 @@
 		(at 137.206667 98)
 		(descr "Cherry MX keyswitch, 1.50u, plate mount, http://cherryamericas.com/wp-content/uploads/2014/12/mx_cat.pdf")
 		(tags "Cherry MX keyswitch 1.50u plate")
-		(property "Reference" "SW10"
+		(property "Reference" "SW4"
 			(at -2.54 -2.794 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -3138,7 +3165,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_Push"
+		(property "Value" "Cherry MX 1.5u"
 			(at -2.54 12.954 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -3163,7 +3190,7 @@
 				)
 			)
 		)
-		(property "Description" "Push button switch, generic, two pins"
+		(property "Description" "Cherry MX compatible keyboard switch, plate mount, 1.5u"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3365,7 +3392,7 @@
 			(drill 1.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(U1-~D5)")
+			(net 9 "/BTN2")
 			(pinfunction "1")
 			(pintype "passive")
 			(uuid "cea94651-4baf-45c7-998a-6f2f31fe525c")
@@ -3394,11 +3421,13 @@
 			)
 		)
 	)
-	(footprint "AEDIKO-Micro-Toggle-Switch-3-Pin-SPDT-on-on:spdt-on-on-micro-toggle-switch"
+	(footprint "controller:SW_Toggle_SPDT_AEDIKO_Micro"
 		(layer "F.Cu")
+		(descr "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole, oval pads on 4.8mm pitch; custom footprint measured from the part")
+		(tags "toggle switch SPDT on-on through-hole AEDIKO")
 		(uuid "ead4f36c-8fcc-4163-9bbf-6422a854ef1d")
 		(at 170 87 -90)
-		(property "Reference" "SW5"
+		(property "Reference" "SW7"
 			(at 0 -0.5 270)
 			(unlocked yes)
 			(layer "F.SilkS")
@@ -3411,7 +3440,7 @@
 				)
 			)
 		)
-		(property "Value" "SW_SPDT"
+		(property "Value" "AEDIKO SPDT on-on micro toggle"
 			(at 0 1 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3436,7 +3465,7 @@
 				)
 			)
 		)
-		(property "Description" "Switch, single pole double throw"
+		(property "Description" "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole; custom project footprint"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3524,7 +3553,7 @@
 			(drill oval 1 2.5)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "Net-(SW5-B)")
+			(net 6 "/MODE4")
 			(pinfunction "B")
 			(pintype "passive")
 			(uuid "5fa98d13-9471-40b8-adac-70eba0b5bc24")

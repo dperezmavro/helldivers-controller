@@ -1,0 +1,194 @@
+(footprint "SW_Toggle_SPDT_AEDIKO_Micro"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "AEDIKO micro toggle switch, SPDT on-on, 3 pin through-hole, oval pads on 4.8mm pitch; custom footprint measured from the part")
+	(tags "toggle switch SPDT on-on through-hole AEDIKO")
+	(property "Reference" "REF**"
+		(at 0 -0.5 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "562c0bd0-9815-4c85-a0c8-ff1c7374737c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+		)
+	)
+	(property "Value" "SW_Toggle_SPDT_AEDIKO_Micro"
+		(at 0 1 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(uuid "5c28a0e6-1f7a-4f3f-a98c-3039061865df")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c7365cd7-a167-4ee0-95b1-c17592578457")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Switch, single pole double throw"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8146fc39-7d5a-4a70-b4d3-127bbe90c7d3")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -6.5 -4)
+		(end 6.5 -4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "f3cdff3d-b3ee-4682-b19f-a387d59cf2a5")
+	)
+	(fp_line
+		(start -6.5 4)
+		(end -6.5 -4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "5e845e2f-49a0-4e61-9150-67db39257fa0")
+	)
+	(fp_line
+		(start 6.5 -4)
+		(end 6.5 4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "869225ec-b937-4067-a0ab-54439c92f1b8")
+	)
+	(fp_line
+		(start 6.5 4)
+		(end -6.5 4)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "b16081e1-3425-4d34-b71f-c408d0889715")
+	)
+	(pad "1" thru_hole rect
+		(at -5 0)
+		(size 1.5 3)
+		(drill oval 1 2.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "c6056a9a-5b72-4b7f-8b39-fd5095a89736")
+		(padstack
+			(mode front_inner_back)
+			(layer "Inner"
+				(shape rect)
+				(size 1.5 3)
+				(zone_connect -1)
+			)
+			(layer "B.Cu"
+				(shape rect)
+				(size 1.5 3)
+				(zone_connect -1)
+			)
+		)
+	)
+	(pad "2" thru_hole oval
+		(at 0 0)
+		(size 1.5 3)
+		(drill oval 1 2.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "7aaf9d9d-12be-4f54-982b-b037199dfd10")
+		(padstack
+			(mode front_inner_back)
+			(layer "Inner"
+				(shape oval)
+				(size 1.5 3)
+				(zone_connect -1)
+			)
+			(layer "B.Cu"
+				(shape oval)
+				(size 1.5 3)
+				(zone_connect -1)
+			)
+		)
+	)
+	(pad "3" thru_hole oval
+		(at 4.572 0)
+		(size 1.5 3)
+		(drill oval 1 2.5)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "4e32e82a-2415-44fd-85c5-43c83f4b5874")
+		(padstack
+			(mode front_inner_back)
+			(layer "Inner"
+				(shape oval)
+				(size 1.5 3)
+				(zone_connect -1)
+			)
+			(layer "B.Cu"
+				(shape oval)
+				(size 1.5 3)
+				(zone_connect -1)
+			)
+		)
+	)
+	(zone
+		(layer "F.SilkS")
+		(uuid "27f0ce72-0ab5-493e-8b3f-d8434acca6ef")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0)
+		)
+		(min_thickness 0.25)
+		(keepout
+			(tracks allowed)
+			(vias allowed)
+			(pads not_allowed)
+			(copperpour allowed)
+			(footprints not_allowed)
+		)
+		(placement
+			(enabled no)
+		)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy -6.5 -4) (xy 6.5 -4) (xy 6.5 4) (xy -6.5 4)
+			)
+		)
+	)
+	(embedded_fonts no)
+)
